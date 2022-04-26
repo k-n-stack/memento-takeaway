@@ -1,4 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 const handleError = (error) => {
   let _error = { error: "" };
@@ -14,6 +16,14 @@ const handleError = (error) => {
   }
   return _error;
 };
+
+async function save(key, value) {
+  await SecureStore.setItemAsync(key, value);
+}
+
+async function getValueFor(key) {
+  return await SecureStore.getItemAsync(key);
+}
 
 const baseUrl = "https://api.stack.mn/api"
 
@@ -54,12 +64,15 @@ const fetchUserByEmailThunk = () => createAsyncThunk(
           password,
         }),
       })
-      .then(res => res.json());
-      // AsyncStorage.setItem('stmn_token', res.token);
-      // AsyncStorage.setItem('stmn_email', res.email);
-      // AsyncStorage.setItem('stmn_pseudonym', res.pseudonym);
-      // AsyncStorage.setItem('stmn_image_url', res.image_url);
-      // AsyncStorage.setItem('stmn_email_verified_at', res.email_verified_at);
+      .then(res => res.json())
+      .then((res) => {
+        save("stmn_token", res.token);
+        save("stmn_email", res.email);
+        save("stmn_pseudonym", res.pseudonym);
+        save("stmn_image_url", res.image_url);
+        save("stmn_email_verified_at", res.email_verified_at);
+        return res;
+      });
 
       return res;
 
@@ -114,7 +127,7 @@ const fetchUserThreadCountThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         },
       })
       .then(res => res.json());
@@ -132,7 +145,7 @@ const fetchUserBookmarkCountThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         },
       })
       .then(res => res.json());
@@ -150,7 +163,7 @@ const fetchUserRedirectionCountThunk = () => createAsyncThunk(
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+            "Authorization": `Bearer ${getValueFor('stmn_token')}`,
           },
       })
       .then(res => res.json());
@@ -168,7 +181,7 @@ const fetchUserCommentCountThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         },
       })
       .then(res => res.json());
@@ -186,7 +199,7 @@ const fetchUserVoteCountThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         },
       })
       .then(res => res.json());
@@ -204,7 +217,7 @@ const fetchUserThreadsThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         },
       })
       .then(res => res.json());
@@ -222,7 +235,7 @@ const fetchUserPinnedThreadsThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         }
       })
       .then(res => res.json());
@@ -240,7 +253,7 @@ const fetchUserSubscribedGroupsThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         }
       })
       .then(res => res.json());
@@ -258,7 +271,7 @@ const fetchUserOwnGroupsThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         }
       })
       .then(res => res.json());
@@ -276,7 +289,7 @@ const fetchUserFriendsThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         }
       })
       .then(res => res.json());
@@ -295,7 +308,7 @@ const postBookmarksThunk = () => createAsyncThunk(
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           thread_anids, 
@@ -322,7 +335,7 @@ const postThreadThunk = () => createAsyncThunk(
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           title,
@@ -347,7 +360,7 @@ const updateBookmarkThunk = () => createAsyncThunk(
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           description,
@@ -372,7 +385,7 @@ const deactivateBookmarkThunk = () => createAsyncThunk(
         method: "DELETE",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           id,
@@ -395,7 +408,7 @@ const postBookmarkTagsThunk = () => createAsyncThunk(
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           bookmark_id,
@@ -419,7 +432,7 @@ const deleteBookmarkTagsThunk = () => createAsyncThunk(
         method: "DELETE",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           bookmark_id,
@@ -443,7 +456,7 @@ const deleteCommentsThunk = () => createAsyncThunk(
         method: "DELETE",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           comments,
@@ -466,7 +479,7 @@ const validateCommentsThunk = () => createAsyncThunk(
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem('stmn_token')}`,
+          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           comments,

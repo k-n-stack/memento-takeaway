@@ -7,25 +7,43 @@ import { useSelector } from 'react-redux';
 
 import { useDispatch } from 'react-redux';
 
-import { login } from '../../Store/Features/userSlice';
-
+import { login, setStatus, setUserThreads } from '../../Store/Features/userSlice';
+import { setIsLogin } from '../../Store/Features/navigationSlice';
+import { setView } from '../../Store/Features/navigationSlice';
 
 const Login = () => {
 
   const dispatch = useDispatch();
   const [hidePassword, setHidePassword] = useState(true);
-  const status = useSelector((state) => (state.user.status));
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const loginStatus = useSelector((state) => (state.user.status));
 
   const handleLogin = () => {
     dispatch(login({
-      email: 'global@stackmemento.com',
-      password: 'password',
+      email: email,
+      password: password,
     }));
-    console.log(status);
   }
 
   useEffect(() => {
-    console.log(status);
+
+    if (loginStatus === "pending login") {
+    }
+
+    if (loginStatus === "unauthenticated") {
+      setErrorMessage("Email do not exist or wrong password");
+      dispatch(setStatus(''));
+    }
+
+    if (loginStatus === 'authenticated') {
+      dispatch(setStatus(""));
+      dispatch(setIsLogin(true));
+      dispatch(setView("test"));
+    }
+
   });
 
   return (
@@ -59,7 +77,9 @@ const Login = () => {
         </View>
         <View style={styles.formContainer}>
           <TextInput 
-            onChangeText={() => {}} 
+            onChangeText={(text) => {
+              setEmail(text);
+            }} 
             style={styles.emailInput}
             placeholder='Email'
             placeholderTextColor="rgba(255, 255, 255, 0.6)" 
@@ -68,7 +88,9 @@ const Login = () => {
             
           <View style={styles.passwordInputContainer}>
             <TextInput 
-              onChangeText={() => {}} 
+              onChangeText={(text) => {
+                setPassword(text);
+              }} 
               style={styles.passwordInput}
               placeholder='Password'
               placeholderTextColor="rgba(255, 255, 255, 0.6)" 
@@ -103,6 +125,10 @@ const Login = () => {
             </View>
           </TouchableHighlight>
 
+          <View>
+            <Text>{errorMessage}</Text>
+          </View>
+          
         </View>
       </View>
     </View>

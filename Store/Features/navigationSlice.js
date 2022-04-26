@@ -23,7 +23,7 @@ export const navigationSlice = createSlice({
   initialState: {
     isLogin: false,
     isRegistered: false,
-    view: "homepage",
+    view: "login",
     overrideView: true,
     browseThread: 0,
     expandUserPanel: false,
