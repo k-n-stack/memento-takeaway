@@ -58,6 +58,8 @@ export const navigationSlice = createSlice({
 
     selectedFellow: {},
     selectedGroup: {},
+
+    previousView: "",
   },
 
   reducers: {
@@ -151,6 +153,9 @@ export const navigationSlice = createSlice({
     setSelectedGroup: (state, action) => {
       state.selectedGroup = action.payload;
     },
+    setPreviousView: (state, action) => {
+      state.previousView = action.payload;
+    },
   },
 
   extraReducers: {
@@ -220,6 +225,7 @@ export const {
   setSelectedThread,
   setSelectedBookmark,
   setTest,
+  setPreviousView,
 } = navigationSlice.actions;
 
 export default navigationSlice.reducer;

@@ -7,9 +7,9 @@ import { useSelector } from 'react-redux';
 
 import { useDispatch } from 'react-redux';
 
-import { login, setStatus, setUserThreads } from '../../Store/Features/userSlice';
-import { setIsLogin } from '../../Store/Features/navigationSlice';
-import { setView } from '../../Store/Features/navigationSlice';
+import { login, setStatus, setUserThreads } from '../Store/Features/userSlice';
+import { setIsLogin } from '../Store/Features/navigationSlice';
+import { setView } from '../Store/Features/navigationSlice';
 
 const Login = () => {
 
@@ -23,9 +23,13 @@ const Login = () => {
 
   const handleLogin = () => {
     dispatch(login({
-      email: email,
-      password: password,
+      email: "global@stackmemento.com",
+      password: "password",
     }));
+    // dispatch(login({
+    //   email: email,
+    //   password: password,
+    // }));
   }
 
   useEffect(() => {
@@ -41,23 +45,25 @@ const Login = () => {
     if (loginStatus === 'authenticated') {
       dispatch(setStatus(""));
       dispatch(setIsLogin(true));
-      dispatch(setView("test"));
+      dispatch(setView("myThreads"));
     }
 
   });
 
   return (
     <View style={styles.container}>
+
       <View style={styles.backgroundContainer}>
         <LinearGradient
-          colors={['#3261cf', '#694896']}
+          colors={['#8299ce', '#694896']}
+          // colors={['#3261cf', '#694896']}
           start={[0, 1]}
           end={[1, 0]}
           style={styles.background}
         >
         </LinearGradient>
       </View>
-      <StatusBar translucent={false} backgroundColor="white"/>
+      
       <View style={styles.contentContainer}>
         <View style={styles.titleIconContainer}>
           <View style={styles.iconContainer}>

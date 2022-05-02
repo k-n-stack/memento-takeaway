@@ -145,7 +145,7 @@ const fetchUserBookmarkCountThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         },
       })
       .then(res => res.json());
@@ -163,7 +163,7 @@ const fetchUserRedirectionCountThunk = () => createAsyncThunk(
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+            "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
           },
       })
       .then(res => res.json());
@@ -181,7 +181,7 @@ const fetchUserCommentCountThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         },
       })
       .then(res => res.json());
@@ -199,7 +199,7 @@ const fetchUserVoteCountThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         },
       })
       .then(res => res.json());
@@ -235,7 +235,7 @@ const fetchUserPinnedThreadsThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         }
       })
       .then(res => res.json());
@@ -253,7 +253,7 @@ const fetchUserSubscribedGroupsThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         }
       })
       .then(res => res.json());
@@ -271,7 +271,7 @@ const fetchUserOwnGroupsThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         }
       })
       .then(res => res.json());
@@ -289,7 +289,7 @@ const fetchUserFriendsThunk = () => createAsyncThunk(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         }
       })
       .then(res => res.json());
@@ -308,7 +308,7 @@ const postBookmarksThunk = () => createAsyncThunk(
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           thread_anids, 
@@ -335,7 +335,7 @@ const postThreadThunk = () => createAsyncThunk(
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           title,
@@ -360,7 +360,7 @@ const updateBookmarkThunk = () => createAsyncThunk(
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           description,
@@ -385,7 +385,7 @@ const deactivateBookmarkThunk = () => createAsyncThunk(
         method: "DELETE",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           id,
@@ -408,7 +408,7 @@ const postBookmarkTagsThunk = () => createAsyncThunk(
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           bookmark_id,
@@ -432,7 +432,7 @@ const deleteBookmarkTagsThunk = () => createAsyncThunk(
         method: "DELETE",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           bookmark_id,
@@ -456,7 +456,7 @@ const deleteCommentsThunk = () => createAsyncThunk(
         method: "DELETE",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           comments,
@@ -479,7 +479,7 @@ const validateCommentsThunk = () => createAsyncThunk(
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${getValueFor('stmn_token')}`,
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         },
         body: JSON.stringify({
           comments,
