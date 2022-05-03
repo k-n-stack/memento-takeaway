@@ -1,8 +1,16 @@
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Dimensions, Image, TouchableWithoutFeedback } from "react-native";
 
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { RedirectionsIcon } from "../Component/Svg";
+
+import { useDispatch } from "react-redux";
+
+import { setPreviousView, setSelectedThread, setView } from "../Store/Features/navigationSlice";
+
 const PinnedThreads = (props) => {
+
+  const dispatch = useDispatch();
 
   const getThreads = (threads) => {
     return threads.map(function (thread) {
@@ -29,12 +37,32 @@ const PinnedThreads = (props) => {
           </View>
 
           <View style={styles.threadContent} >
-            <Text 
-              style={styles.threadTitle}
-              numberOfLines={1}
-            >
-              {thread.title}
-            </Text>
+
+            <View style={styles.threadTitleContainer}>
+              <View style={styles.threadTitleImage}>
+                <Image
+                  style={styles.avatar}
+                  source={{ uri : `https://api.stack.mn/api/${thread.user.image_url}` }}
+                />
+                <Text 
+                  style={styles.threadTitle}
+                  numberOfLines={1}
+                >
+                  {thread.title}
+                </Text>
+
+              </View>
+              <TouchableWithoutFeedback onPress={() => {
+                dispatch(setPreviousView("pinnedThread"));
+                dispatch(setSelectedThread(thread));
+                dispatch(setView("threadBrowser"));
+              }}>
+                <View style={styles.threadTitleIcon}>
+                  <RedirectionsIcon color={"rgba(0, 0, 0, 0.4)"} />
+                </View>
+              </TouchableWithoutFeedback>
+
+            </View>
             {getBookmarks(thread.bookmarks)}
           </View>
 
@@ -82,11 +110,25 @@ const styles = StyleSheet.create({
   threadContent: {
     backgroundColor: 'rgba(255, 255, 255, 0)',
   },
+
+  threadTitleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 25,
+  },
   threadTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 25,
   },
+  threadTitleIcon: {
+    // backgroundColor: "red",
+    width: 30,
+    height: 30,
+  },
+  threadTitleImage: {
+    flexDirection: "row",
+    alignItems: "center",
+  },  
   bookmarkContainer: {
     borderRadius: 5,
     backgroundColor: "#FFFFFF",
@@ -112,6 +154,12 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
   },
+  avatar:{
+    width: 70,
+    height: 70,
+    borderRadius: 70,
+    marginRight: 10,
+  }
 });
 
 export default PinnedThreads;

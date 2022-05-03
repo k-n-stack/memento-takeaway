@@ -21,6 +21,8 @@ const Interface = (props) => {
   const pinnedThreads = useSelector((state) => (state.user.pinnedThreads));
   const view = useSelector((state) => (state.navigation.view));
   const selectedThread = useSelector((state) => (state.navigation.selectedThread));
+  const imageUrl = useSelector((state) => (state.user.image_url));
+  const previousView = useSelector((state) => (state.navigation.previousView));
 
   const translateXAnim = useRef(new Animated.Value(0)).current;
 
@@ -132,7 +134,7 @@ const Interface = (props) => {
             <View style={styles.avatarContainer}>
               <Image
                 style={styles.avatar}
-                source={require('./myimage.png')}
+                source={{ uri : `https://api.stack.mn/api/${imageUrl}` }}
               />
             </View>
           </TouchableWithoutFeedback>
@@ -182,6 +184,17 @@ const Interface = (props) => {
 
       </View>
 
+      {
+        previousView === "pinnedThread" &&
+        <View style={styles.threadOwner}>
+          <Image
+            style={styles.threadOwnerAvatar}
+            source={{ uri : `https://api.stack.mn/api/${selectedThread.user.image_url}` }}
+          />
+          <Text style={styles.ownerName}>{selectedThread.user.pseudonym}</Text>
+        </View>
+      }
+
       <Animated.View 
           style={{
             ...styles.settingsPanel,
@@ -208,7 +221,7 @@ const Interface = (props) => {
             <View style={styles.settingsPanelAvatar}>
               <Image
                 style={styles.avatar}
-                source={require('./myimage.png')}
+                source={{ uri : `https://api.stack.mn/api/${imageUrl}` }}
               />
             </View>
 
@@ -325,6 +338,27 @@ const styles = StyleSheet.create({
     width: 36,
     overflow: "visible",
   },
+  threadOwner: {
+    zIndex: 10,
+    position: "absolute",
+    top: 80,
+    right: 10,
+    alignItems: "flex-end",
+    backgroundColor: "#3650AB",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 10,
+  },
+  threadOwnerAvatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 60,
+  },
+  ownerName: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#FFFFFF"
+  }
 });
 
 export default Interface;

@@ -1,11 +1,13 @@
-import { View, Text, StyleSheet } from "react-native"
+import { View, Text, StyleSheet, Image } from "react-native"
 import { useSelector } from "react-redux";
 
 import { LinearGradient } from 'expo-linear-gradient';
+import { useEffect } from "react";
 
 const ThreadBrowser = () => {
 
   const thread = useSelector((state) => (state.navigation.selectedThread));
+  const previousView = useSelector((state) => (state.navigation.previousView));
 
   const getBookmarks = (bookmarks) => {
     return bookmarks.map(function (bookmark) {
@@ -47,10 +49,15 @@ const ThreadBrowser = () => {
     });
   }
 
+  useEffect(()=>{console.log(thread)});
+
   return (
-    <View style={styles.browserContainer}>
-      {getBookmarks(Object.keys(thread).length !== 0 ? thread.bookmarks : [])}
-    </View>
+    <>
+      {/* <View style={styles.browserContainer}> */}
+      <View style={previousView === "pinnedThread" ? styles.browserContainerExtra : styles.browserContainer}>
+        {getBookmarks(Object.keys(thread).length !== 0 ? thread.bookmarks : [])}
+      </View>
+    </>
   );
 };
 
@@ -59,6 +66,12 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
     paddingTop: 50,
+    paddingBottom: 50,
+  },
+  browserContainerExtra: {
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 120,
     paddingBottom: 50,
   },
   bookmarkContainer: {
@@ -106,6 +119,24 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
   },
+  avatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 80,
+    marginRight: 10,
+  },
+  threadOwner: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 20,
+    marginTop: 10,
+    // position: "absolute",
+  },
+  ownerName: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#FFFFFF"
+  }
 });
 
 export default ThreadBrowser;

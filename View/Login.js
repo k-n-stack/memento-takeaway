@@ -23,9 +23,13 @@ const Login = () => {
 
   const handleLogin = () => {
     dispatch(login({
-      email: "global@stackmemento.com",
+      email: "linnie.altenwerth@example.net",
       password: "password",
     }));
+    // dispatch(login({
+    //   email: "global@stackmemento.com",
+    //   password: "password",
+    // }));
     // dispatch(login({
     //   email: email,
     //   password: password,
