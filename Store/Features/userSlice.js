@@ -285,6 +285,7 @@ export const userSlice = createSlice({
     [deleteComments.fulfilled]: (state, action) => {
       state.status = action.payload.status;
       if (action.payload.status === "comments deleted") {
+
         const bookmarkId = action.payload.bookmark.id;
         state.threads = state.threads.map(function (thread) {
           const bookmarks = thread.bookmarks.map(function (bookmark) {
@@ -295,7 +296,13 @@ export const userSlice = createSlice({
           thread.bookmarks = bookmarks;
           return thread;
         });
+
+        state.invalidComments = state.invalidComments.map(function (comment) {
+          return comment.id == action.payload.comment_id ? null : comment;
+        }).filter(value => value != null);
+
       }
+
     },
 
     [validateComments.rejected]: (state, action) => {},
@@ -313,6 +320,10 @@ export const userSlice = createSlice({
           thread.bookmarks = bookmarks;
           return thread;
         });
+
+        state.invalidComments = state.invalidComments.map(function (comment) {
+          return comment.id == action.payload.comment_id ? null : comment;
+        }).filter(value => value != null);
       }
     },
 

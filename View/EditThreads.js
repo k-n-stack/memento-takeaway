@@ -1,24 +1,27 @@
 import { useEffect } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableWithoutFeedback } from "react-native";
 import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 import { TrashIcon } from "../Component/Svg";
 import { ThumbUpIcon } from "../Component/Svg";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { validateComments, deleteComments } from "../Store/Features/navigationSlice";
 
 const EditThreads = () => {
+
+  const dispatch = useDispatch();
 
   const invalidComments = useSelector((state) => (state.user.invalidComments));
 
   useEffect(() => {
-    console.log(invalidComments);
+    // console.log(invalidComments.map(function (comment) {return comment.id}));
   });
 
   const getComments = (comments) => {
-    return comments.map(function (comment) {
-      console.log(comment.user.image_url);
+    return comments.map(function (comment, index) {
+      // console.log(comment.user.image_url);
       return (
-        <View style={styles.commentContainer} key={`comment-${comment.id}`}>
+        <View style={styles.commentContainer} key={`comment-${index}`}>
           <View style={styles.commentPoster}>
             <Image 
               style={styles.avatar}
@@ -46,24 +49,43 @@ const EditThreads = () => {
           <Text numberOfLines={1} style={styles.bookmarkUrl}>{comment.bookmark.url}</Text>
 
           <View style={styles.buttonContainer}>
-            <View style={{
-              ...styles.button,
-              backgroundColor: "#a52121",
-            }}>
-              <View style={styles.buttonIconContainer}>
-                <TrashIcon color="#FFFFFF" />
+
+            <TouchableWithoutFeedback
+              onPress={() => {
+                dispatch(deleteComments({
+                  comments: [comment.id],
+                }));
+              }}
+            >
+              <View style={{
+                ...styles.button,
+                backgroundColor: "#a52121",
+              }}>
+                <View style={styles.buttonIconContainer}>
+                  <TrashIcon color="#FFFFFF" />
+                </View>
+                <Text style={styles.buttonText}>Reject</Text>
               </View>
-              <Text style={styles.buttonText}>Reject</Text>
-            </View>
-            <View style={{
-              ...styles.button,
-              backgroundColor: "#99D17E",
-            }}>
-              <View style={styles.buttonIconContainer}>
-                <ThumbUpIcon color="#FFFFFF" />
+            </TouchableWithoutFeedback>
+
+            <TouchableWithoutFeedback
+              onPress={() => {
+                dispatch(validateComments({
+                  comments: [comment.id],
+                }))
+              }}
+            >
+              <View style={{
+                ...styles.button,
+                backgroundColor: "#99D17E",
+              }}>
+                <View style={styles.buttonIconContainer}>
+                  <ThumbUpIcon color="#FFFFFF" />
+                </View>
+                <Text style={styles.buttonText}>Validate</Text>
               </View>
-              <Text style={styles.buttonText}>Validate</Text>
-            </View>
+            </TouchableWithoutFeedback>
+
           </View>
         </View>
       );

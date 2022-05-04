@@ -49,7 +49,7 @@ const ThreadBrowser = () => {
     });
   }
 
-  useEffect(()=>{console.log(thread)});
+  // useEffect(()=>{console.log(thread)});
 
   return (
     <>

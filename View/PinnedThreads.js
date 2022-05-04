@@ -13,9 +13,9 @@ const PinnedThreads = (props) => {
   const dispatch = useDispatch();
 
   const getThreads = (threads) => {
-    return threads.map(function (thread) {
+    return threads.map(function (thread, index) {
       return (
-        <View style={styles.threadContainer} key={`thread-${thread.alphanumeric_id}`}>
+        <View style={styles.threadContainer} key={`pinned-thread-${index}`}>
 
           <View style={styles.backgroundContainer}>
             <LinearGradient
@@ -72,9 +72,9 @@ const PinnedThreads = (props) => {
   }
 
   const getBookmarks = (bookmarks) => {
-    return bookmarks.map(function (bookmark) {
+    return bookmarks.map(function (bookmark, index) {
       return (
-        <View style={styles.bookmarkContainer} key={`bookmark-${bookmark.id}`}>
+        <View style={styles.bookmarkContainer} key={`pinned-thread-bookmark-${index}`}>
           <Text numberOfLines={1} style={styles.bookmarkDescription}>{bookmark.description}</Text>
           <Text numberOfLines={1} style={styles.bookmarkUrl}>{bookmark.url}</Text>
         </View>

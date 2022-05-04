@@ -8,14 +8,16 @@ import { setPreviousView, setSelectedThread, setView } from "../Store/Features/n
 
 import { useDispatch } from "react-redux";
 
+import * as Linking from 'expo-linking';
+
 const MyThreads = (props) => {
 
   const dispatch = useDispatch();
 
   const getThreads = (threads) => {
-    return threads.map(function (thread) {
+    return threads.map(function (thread, index) {
       return (
-        <View style={styles.threadContainer} key={`thread-${thread.alphanumeric_id}`}>
+        <View style={styles.threadContainer} key={`my-threads-${index}`}>
 
           <View style={styles.backgroundContainer}>
             <LinearGradient
@@ -64,11 +66,15 @@ const MyThreads = (props) => {
   }
 
   const getBookmarks = (bookmarks) => {
-    return bookmarks.map(function (bookmark) {
+    return bookmarks.map(function (bookmark, index) {
       return (
-        <View style={styles.bookmarkContainer} key={`bookmark-${bookmark.id}`}>
+        <View style={styles.bookmarkContainer} key={`my-threads-bookmark-${index}`}>
           <Text numberOfLines={1} style={styles.bookmarkDescription}>{bookmark.description}</Text>
-          <Text numberOfLines={1} style={styles.bookmarkUrl}>{bookmark.url}</Text>
+          <TouchableWithoutFeedback onPress={() => {
+            Linking.openURL(bookmark.url);
+          }}>
+            <Text numberOfLines={1} style={styles.bookmarkUrl}>{bookmark.url}</Text>
+          </TouchableWithoutFeedback>
         </View>
       )
     })
