@@ -22,14 +22,14 @@ const Login = () => {
   const loginStatus = useSelector((state) => (state.user.status));
 
   const handleLogin = () => {
-    dispatch(login({
-      email: "linnie.altenwerth@example.net",
-      password: "password",
-    }));
     // dispatch(login({
-    //   email: "global@stackmemento.com",
+    //   email: "linnie.altenwerth@example.net",
     //   password: "password",
     // }));
+    dispatch(login({
+      email: "global@stackmemento.com",
+      password: "password",
+    }));
     // dispatch(login({
     //   email: email,
     //   password: password,

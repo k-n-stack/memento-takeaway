@@ -34,6 +34,7 @@ const routes = {
   fetchUserBookmarkCount: `${baseUrl}/user-bookmark-count`,
   fetchUserRedirectionCount: `${baseUrl}/user-redirection-count`,
   fetchUserCommentCount: `${baseUrl}/user-comment-count`,
+  fetchUserInvalidComment: `${baseUrl}/user-invalid-comment`,
   fetchUserVoteCount: `${baseUrl}/user-vote-count`,
   fetchUserThreads: `${baseUrl}/user-thread-full`,
   fetchUserPinnedThreads: `${baseUrl}/user-pinned`,
@@ -54,7 +55,7 @@ const fetchUserByEmailThunk = () => createAsyncThunk(
   "users/fetchUserByEmail",
   async (data, { rejectWithValue }) => {
     try {   
-      console.log('in fetch');   
+      // console.log('in fetch');   
       const { email, password } = data;
       const res = await fetch(routes.fetchUserByEmail, {
         method: "POST",
@@ -77,7 +78,7 @@ const fetchUserByEmailThunk = () => createAsyncThunk(
       return res;
 
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return rejectWithValue(handleError(error));
     }
   }
@@ -180,6 +181,24 @@ const fetchUserCommentCountThunk = () => createAsyncThunk(
       return await fetch(routes.fetchUserCommentCount, {
         method: "GET",
         headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
+        },
+      })
+      .then(res => res.json());
+    } catch (error) {
+      return rejectWithValue(handleError(error));
+    }
+  }
+);
+
+const fetchUserInvalidCommentThunk = () => createAsyncThunk(
+  "user/fetchUserInvalidComment",
+  async (data, { rejectWithValue }) => {
+    try {
+      return await fetch(routes.fetchUserInvalidComment, {
+        method: "GET",
+        headers: { 
           "Content-Type": "application/json",
           "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
         },
@@ -493,6 +512,10 @@ const validateCommentsThunk = () => createAsyncThunk(
   }
 );
 
+
+
+
+
 export {
   fetchUserByEmailThunk,
   fetchUserRegistrationThunk,
@@ -501,6 +524,7 @@ export {
   fetchUserBookmarkCountThunk,
   fetchUserRedirectionCountThunk,
   fetchUserCommentCountThunk,
+  fetchUserInvalidCommentThunk,
   fetchUserVoteCountThunk,
   fetchUserThreadsThunk,
   fetchUserPinnedThreadsThunk,

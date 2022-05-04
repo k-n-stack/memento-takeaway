@@ -15,7 +15,7 @@ const PinnedThreads = (props) => {
   const getThreads = (threads) => {
     return threads.map(function (thread) {
       return (
-        <View style={styles.threadContainer} >
+        <View style={styles.threadContainer} key={`thread-${thread.alphanumeric_id}`}>
 
           <View style={styles.backgroundContainer}>
             <LinearGradient
@@ -74,7 +74,7 @@ const PinnedThreads = (props) => {
   const getBookmarks = (bookmarks) => {
     return bookmarks.map(function (bookmark) {
       return (
-        <View style={styles.bookmarkContainer}>
+        <View style={styles.bookmarkContainer} key={`bookmark-${bookmark.id}`}>
           <Text numberOfLines={1} style={styles.bookmarkDescription}>{bookmark.description}</Text>
           <Text numberOfLines={1} style={styles.bookmarkUrl}>{bookmark.url}</Text>
         </View>
@@ -115,13 +115,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 25,
+    overflow: "hidden",
   },
   threadTitle: {
     fontSize: 20,
     fontWeight: "bold",
+    width: 230,
+    flexGrow: 0,
   },
   threadTitleIcon: {
-    // backgroundColor: "red",
     width: 30,
     height: 30,
   },

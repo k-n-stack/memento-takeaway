@@ -15,7 +15,7 @@ const MyThreads = (props) => {
   const getThreads = (threads) => {
     return threads.map(function (thread) {
       return (
-        <View style={styles.threadContainer} >
+        <View style={styles.threadContainer} key={`thread-${thread.alphanumeric_id}`}>
 
           <View style={styles.backgroundContainer}>
             <LinearGradient
@@ -66,7 +66,7 @@ const MyThreads = (props) => {
   const getBookmarks = (bookmarks) => {
     return bookmarks.map(function (bookmark) {
       return (
-        <View style={styles.bookmarkContainer}>
+        <View style={styles.bookmarkContainer} key={`bookmark-${bookmark.id}`}>
           <Text numberOfLines={1} style={styles.bookmarkDescription}>{bookmark.description}</Text>
           <Text numberOfLines={1} style={styles.bookmarkUrl}>{bookmark.url}</Text>
         </View>

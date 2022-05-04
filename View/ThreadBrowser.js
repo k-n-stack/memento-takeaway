@@ -41,7 +41,7 @@ const ThreadBrowser = () => {
   const getComments = (comments) => {
     return comments.map(function (comment) {
       return (
-        <View style={styles.commentContainer}>
+        <View style={comment.validated_at === null ? styles.commentContainerInvalid : styles.commentContainer}>
           <Text style={styles.commentPseudonym}>{comment.user.pseudonym}</Text>
           <Text>{comment.body}</Text>
         </View>
@@ -53,7 +53,6 @@ const ThreadBrowser = () => {
 
   return (
     <>
-      {/* <View style={styles.browserContainer}> */}
       <View style={previousView === "pinnedThread" ? styles.browserContainerExtra : styles.browserContainer}>
         {getBookmarks(Object.keys(thread).length !== 0 ? thread.bookmarks : [])}
       </View>
@@ -71,8 +70,8 @@ const styles = StyleSheet.create({
   browserContainerExtra: {
     paddingLeft: 15,
     paddingRight: 15,
-    paddingTop: 120,
-    paddingBottom: 50,
+    paddingTop: 50,
+    paddingBottom: 140,
   },
   bookmarkContainer: {
     borderRadius: 10,
@@ -114,6 +113,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     elevation: 1,
   },
+  commentContainerInvalid: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    backgroundColor: '#ffad4f',
+    marginBottom: 10,
+    elevation: 1,
+    opacity: 0.5,
+  },  
   commentPseudonym: {
     fontStyle: "italic",
     fontWeight: "bold",

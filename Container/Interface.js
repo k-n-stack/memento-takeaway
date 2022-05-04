@@ -6,7 +6,7 @@ import EditThreads from "../View/EditThreads";
 import PinnedThreads from "../View/PinnedThreads";
 import MyThreads from "../View/MyThreads";
 
-import { setUserPinnedThreads, setUserThreads } from "../Store/Features/userSlice";
+import { setUserPinnedThreads, setUserThreads, setUserInvalidComment } from "../Store/Features/userSlice";
 import { setView } from "../Store/Features/navigationSlice";
 import { Dispatch } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,6 +29,7 @@ const Interface = (props) => {
   useEffect(() => {
     dispatch(setUserThreads());
     dispatch(setUserPinnedThreads());
+    dispatch(setUserInvalidComment());
   }, []);
 
   useEffect(() => {
@@ -341,7 +342,8 @@ const styles = StyleSheet.create({
   threadOwner: {
     zIndex: 10,
     position: "absolute",
-    top: 80,
+    // top: 80,
+    bottom: 20,
     right: 10,
     alignItems: "flex-end",
     backgroundColor: "#3650AB",

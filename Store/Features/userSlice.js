@@ -7,6 +7,7 @@ import {
   fetchUserBookmarkCountThunk,
   fetchUserRedirectionCountThunk,
   fetchUserCommentCountThunk,
+  fetchUserInvalidCommentThunk,
   fetchUserVoteCountThunk,
   fetchUserThreadsThunk,
   fetchUserPinnedThreadsThunk,
@@ -30,6 +31,7 @@ export const setUserThreadCount = fetchUserThreadCountThunk();
 export const setUserBookmarkCount = fetchUserBookmarkCountThunk();
 export const setUserRedirectionCount = fetchUserRedirectionCountThunk();
 export const setUserCommentCount = fetchUserCommentCountThunk();
+export const setUserInvalidComment = fetchUserInvalidCommentThunk();
 export const setUserVoteCount = fetchUserVoteCountThunk();
 export const setUserThreads = fetchUserThreadsThunk();
 export const setUserPinnedThreads = fetchUserPinnedThreadsThunk();
@@ -70,6 +72,8 @@ export const userSlice = createSlice({
     ownGroups: [],
 
     friends: [],
+
+    invalidComments: [],
   },
 
   reducers: {
@@ -310,6 +314,12 @@ export const userSlice = createSlice({
           return thread;
         });
       }
+    },
+
+    [setUserInvalidComment.rejected]: (state, action) => {},
+    [setUserInvalidComment.pending]: (state, action) => {},
+    [setUserInvalidComment.fulfilled]: (state, action) => {
+      state.invalidComments = action.payload;
     },
 
   },
