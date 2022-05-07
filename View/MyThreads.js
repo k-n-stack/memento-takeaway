@@ -10,9 +10,23 @@ import { useDispatch } from "react-redux";
 
 import * as Linking from 'expo-linking';
 
+import { setUserInvalidComment } from "../Store/Features/userSlice";
+import { useEffect } from "react";
+
+import { useSelector } from "react-redux";
+
 const MyThreads = (props) => {
 
   const dispatch = useDispatch();
+  const previousView = useSelector((state) => (state.navigation.previousView));
+
+  useEffect(() => {
+    if (previousView == "editThreads") {
+      // console.log('kek');
+      dispatch(setUserInvalidComment());
+      dispatch(setPreviousView(""));
+    }
+  });
 
   const getThreads = (threads) => {
     return threads.map(function (thread, index) {

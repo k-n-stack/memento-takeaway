@@ -11,6 +11,8 @@ import { BackHandler, Alert } from 'react-native';
 
 import { setPreviousView, setView } from "../Store/Features/navigationSlice";
 
+import * as SecureStore from 'expo-secure-store';
+
 const Navigation = () => {
 
   const dispatch = useDispatch();

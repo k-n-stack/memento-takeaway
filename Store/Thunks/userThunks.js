@@ -29,6 +29,7 @@ const baseUrl = "https://api.stack.mn/api"
 
 const routes = {
   fetchUserByEmail: `${baseUrl}/login`,
+  fetchUserAutoLogin: `${baseUrl}/user-info`,
   fetchUserRegistration: `${baseUrl}/register`,
   fetchUserThreadCount: `${baseUrl}/user-thread-count`,
   fetchUserBookmarkCount: `${baseUrl}/user-bookmark-count`,
@@ -68,10 +69,6 @@ const fetchUserByEmailThunk = () => createAsyncThunk(
       .then(res => res.json())
       .then((res) => {
         save("stmn_token", res.token);
-        save("stmn_email", res.email);
-        save("stmn_pseudonym", res.pseudonym);
-        save("stmn_image_url", res.image_url);
-        save("stmn_email_verified_at", res.email_verified_at);
         return res;
       });
 
@@ -79,6 +76,24 @@ const fetchUserByEmailThunk = () => createAsyncThunk(
 
     } catch (error) {
       // console.log(error);
+      return rejectWithValue(handleError(error));
+    }
+  }
+);
+
+const fetchUserAutoLoginThunk = () => createAsyncThunk(
+  "users/fetchUserAutoLogin",
+  async (data, { rejectWithValue }) => {
+    try {
+      return await fetch(routes.fetchUserAutoLogin, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${await getValueFor('stmn_token')}`,
+        },
+      })
+      .then(res => res.json());
+    } catch (error) {
       return rejectWithValue(handleError(error));
     }
   }
@@ -539,4 +554,5 @@ export {
   deleteBookmarkTagsThunk,
   deleteCommentsThunk,
   validateCommentsThunk,
+  fetchUserAutoLoginThunk,
 };

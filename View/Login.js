@@ -10,6 +10,14 @@ import { useDispatch } from 'react-redux';
 import { login, setStatus, setUserThreads } from '../Store/Features/userSlice';
 import { setIsLogin } from '../Store/Features/navigationSlice';
 import { setView } from '../Store/Features/navigationSlice';
+import { autoLogin } from '../Store/Features/userSlice';
+
+import * as SecureStore from 'expo-secure-store';
+
+// async function getValueFor(k"stmn_token" {
+//   return await SecureStore.getItemAsync(key);
+// }
+
 
 const Login = () => {
 
@@ -22,10 +30,6 @@ const Login = () => {
   const loginStatus = useSelector((state) => (state.user.status));
 
   const handleLogin = () => {
-    // dispatch(login({
-    //   email: "linnie.altenwerth@example.net",
-    //   password: "password",
-    // }));
     dispatch(login({
       email: "global@stackmemento.com",
       password: "password",
@@ -53,6 +57,20 @@ const Login = () => {
     }
 
   });
+
+  useEffect(() => {
+    SecureStore.getItemAsync("stmn_token").then(function (res) {
+      if (res === null) {
+        // alert('no token');
+      } else {
+        // alert('got token : ' + res);
+        dispatch(autoLogin());
+        dispatch(setStatus(""));
+        dispatch(setIsLogin(true));
+        dispatch(setView("myThreads"));
+      }
+    })
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -139,6 +157,21 @@ const Login = () => {
             <Text>{errorMessage}</Text>
           </View>
           
+
+
+          {/* <TouchableHighlight onPress={() => {
+            alert('clicked');
+            dispatch(setUserThreads());
+          }}>
+            <View style={{
+              backgroundColor: "red",
+              width: 100,
+              height: 100,
+            }}>
+              <Text>hello test</Text>
+            </View>
+          </TouchableHighlight> */}
+
         </View>
       </View>
     </View>

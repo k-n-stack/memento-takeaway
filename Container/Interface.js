@@ -1,18 +1,28 @@
-import { View, Animated, Text, StyleSheet, Dimensions, ScrollView, Image, TouchableWithoutFeedback, StatusBar } from "react-native";
+import { View, Animated, Text, StyleSheet, Dimensions, ScrollView, Image, TouchableWithoutFeedback, TouchableHighlight, StatusBar } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path } from 'react-native-svg';
 import { useEffect, useRef, useState } from "react";
 import EditThreads from "../View/EditThreads";
 import PinnedThreads from "../View/PinnedThreads";
 import MyThreads from "../View/MyThreads";
+import { ExitIcon } from "../Component/Svg";
+import * as SecureStore from 'expo-secure-store';
 
 import { setUserPinnedThreads, setUserThreads, setUserInvalidComment } from "../Store/Features/userSlice";
 import { setView } from "../Store/Features/navigationSlice";
 import { Dispatch } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { setStatus, setIsLogin } from "../Store/Features/userSlice";
 
 import { ThreadIcon, PinIcon, EditIcon, ArrowLeftIcon, RedirectionsIcon } from "../Component/Svg";
 import ThreadBrowser from "../View/ThreadBrowser";
+
+import { setUpdateAction, logout } from "../Store/Features/userSlice";
+
+
+async function deleteValueFor(key) {
+  await SecureStore.deleteItemAsync(key);
+}
 
 const Interface = (props) => {
 
@@ -22,7 +32,10 @@ const Interface = (props) => {
   const view = useSelector((state) => (state.navigation.view));
   const selectedThread = useSelector((state) => (state.navigation.selectedThread));
   const imageUrl = useSelector((state) => (state.user.image_url));
+  const pseudonym = useSelector((state) => (state.user.pseudonym));
+  const email = useSelector((state) => (state.user.email));
   const previousView = useSelector((state) => (state.navigation.previousView));
+  const updateAction = useSelector((state) => (state.user.updateAction));
 
   const translateXAnim = useRef(new Animated.Value(0)).current;
 
@@ -31,10 +44,6 @@ const Interface = (props) => {
     dispatch(setUserPinnedThreads());
     dispatch(setUserInvalidComment());
   }, []);
-
-  useEffect(() => {
-    // console.log(pinnedThreads);
-  })
 
   const getTitle = (view) => {
     switch (view) {
@@ -127,7 +136,7 @@ const Interface = (props) => {
             onPress={() => {
               Animated.timing(translateXAnim, {
                 toValue: 1,
-                duration: 300,
+                duration: 500,
                 useNativeDriver: true,
               }).start();
             }}
@@ -153,6 +162,10 @@ const Interface = (props) => {
           <View style={styles.navbar}>
             <View sytle={styles.iconContainer}>
               <TouchableWithoutFeedback onPress={() => {
+                if (updateAction) {
+                  dispatch(setUserInvalidComment());
+                  dispatch(setUpdateAction(false));
+                }
                 dispatch(setView("pinnedThread"));
               }}>
                 <View style={styles.svgContainer}>
@@ -163,6 +176,10 @@ const Interface = (props) => {
 
             <View sytle={styles.iconContainer}>
               <TouchableWithoutFeedback onPress={() => {
+                if (updateAction) {
+                  dispatch(setUserInvalidComment());
+                  dispatch(setUpdateAction(false));
+                }
                 dispatch(setView("myThread"));
               }}>
                 <View style={styles.svgContainer}>
@@ -202,7 +219,7 @@ const Interface = (props) => {
             transform: [{
               translateX: translateXAnim.interpolate({
                 inputRange: [0, 1],
-                outputRange: [320, 0]  // 0 : 150, 0.5 : 75, 1 : 0
+                outputRange: [320, 0],
               }),
             }],
           }}
@@ -224,6 +241,24 @@ const Interface = (props) => {
                 style={styles.avatar}
                 source={{ uri : `https://api.stack.mn/api/${imageUrl}` }}
               />
+            </View>
+
+            <View style={styles.settingsPanelInfos}>
+              <Text style={styles.pseudonym}>{pseudonym}</Text>
+              <Text style={styles.email}>{email}</Text>
+              <View style={styles.settingsPanelLogout}>
+                <TouchableWithoutFeedback onPress={() => {
+                  deleteValueFor("stmn_token");
+                  dispatch(setView("login"));
+                }}>
+                  <View style={styles.settingsPanelLogoutContainer}>
+                    <View style={styles.exitIconContainer}>
+                      <ExitIcon color="red" />
+                    </View>
+                    <Text style={styles.exitText}>Exit</Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
             </View>
 
             <TouchableWithoutFeedback onPress={() => {
@@ -340,27 +375,65 @@ const styles = StyleSheet.create({
     overflow: "visible",
   },
   threadOwner: {
+    flexDirection: "row",
     zIndex: 10,
     position: "absolute",
-    // top: 80,
-    bottom: 20,
-    right: 10,
-    alignItems: "flex-end",
+    bottom: 0,
+    right: 0,
+    alignItems: "center",
     backgroundColor: "#3650AB",
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 10,
+    // borderRadius: 10,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    width: "100%",
   },
   threadOwnerAvatar: {
     width: 60,
     height: 60,
     borderRadius: 60,
+    marginRight: 10,
   },
   ownerName: {
     fontSize: 22,
     fontWeight: "bold",
     color: "#FFFFFF"
-  }
+  },
+  settingsPanelInfos: {
+    flex: 1,
+    alignItems: "flex-end",
+    paddingRight: 20,
+    paddingTop: 20,
+  },
+  pseudonym: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "white",
+  },
+  email: {
+    fontSize: 16,
+    color: "white",
+  },
+  settingsPanelLogout: {
+    flexDirection: "column-reverse",
+    flex: 1,
+  },
+  exitIconContainer: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
+  },
+  settingsPanelLogoutContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 25,
+  },
+  exitText: {
+    color: "red",
+    fontSize: 20,
+    fontWeight: "bold",
+  },  
 });
 
 export default Interface;
