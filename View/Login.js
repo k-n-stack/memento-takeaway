@@ -30,14 +30,14 @@ const Login = () => {
   const loginStatus = useSelector((state) => (state.user.status));
 
   const handleLogin = () => {
-    dispatch(login({
-      email: "global@stackmemento.com",
-      password: "password",
-    }));
     // dispatch(login({
-    //   email: email,
-    //   password: password,
+    //   email: "global@stackmemento.com",
+    //   password: "password",
     // }));
+    dispatch(login({
+      email: email,
+      password: password,
+    }));
   }
 
   useEffect(() => {
