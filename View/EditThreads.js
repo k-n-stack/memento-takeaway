@@ -1,74 +1,29 @@
-import { useEffect } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, Animated, Button } from "react-native";
 import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 import { TrashIcon } from "../Component/Svg";
 import { ThumbUpIcon } from "../Component/Svg";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { validateComments, deleteComments } from "../Store/Features/navigationSlice";
+
+import { setPreviousView } from "../Store/Features/navigationSlice";
+
+import Comment from "../Module/Comment";
 
 const EditThreads = () => {
-
+  
   const invalidComments = useSelector((state) => (state.user.invalidComments));
 
-  useEffect(() => {
-    console.log(invalidComments);
-  });
-
   const getComments = (comments) => {
-    return comments.map(function (comment) {
-      console.log(comment.user.image_url);
-      return (
-        <View style={styles.commentContainer} key={`comment-${comment.id}`}>
-          <View style={styles.commentPoster}>
-            <Image 
-              style={styles.avatar}
-              source={{ uri : `https://api.stack.mn/api/${comment.user.image_url}` }}
-            />
-            <View style={styles.userInfos}>
-              <Text style={styles.pseudonym}>{comment.user.pseudonym}</Text>
-              <Text style={styles.date}>{comment.created_at}</Text>
-            </View>
-          </View>
-          <View style={styles.bodyContainer}>
-            <Text>{comment.body}</Text>
-          </View>
-
-          
-          <Text style={styles.threadsHeader}>Threads :</Text>
-          <Text style={styles.threadsList} numberOfLines={1}>
-            {comment.bookmark.threads.map(function (thread) {
-              return thread.title;
-            }).join(" - ")}
-          </Text>
-
-          <Text numberOfLines={1} style={styles.bookmarkHeader}>Bookmark :</Text>
-          <Text numberOfLines={1} style={styles.bookmarkDescription}>{comment.bookmark.description}</Text>
-          <Text numberOfLines={1} style={styles.bookmarkUrl}>{comment.bookmark.url}</Text>
-
-          <View style={styles.buttonContainer}>
-            <View style={{
-              ...styles.button,
-              backgroundColor: "#a52121",
-            }}>
-              <View style={styles.buttonIconContainer}>
-                <TrashIcon color="#FFFFFF" />
-              </View>
-              <Text style={styles.buttonText}>Reject</Text>
-            </View>
-            <View style={{
-              ...styles.button,
-              backgroundColor: "#99D17E",
-            }}>
-              <View style={styles.buttonIconContainer}>
-                <ThumbUpIcon color="#FFFFFF" />
-              </View>
-              <Text style={styles.buttonText}>Validate</Text>
-            </View>
-          </View>
-        </View>
-      );
+    return comments.map(function (comment, index) {
+      return <Comment comment={comment} key={`comment-${index}`}/>;
     });
   }
+
+  useEffect(() => {
+    setPreviousView("editThreads");
+  }, []);
 
   return (
     <View style={styles.editContainer}>

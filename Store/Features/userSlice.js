@@ -22,9 +22,11 @@ import {
   deleteBookmarkTagsThunk,
   deleteCommentsThunk,
   validateCommentsThunk,
+  fetchUserAutoLoginThunk,
 } from "../Thunks/userThunks";
 
 export const login = fetchUserByEmailThunk();
+export const autoLogin = fetchUserAutoLoginThunk();
 export const register = fetchUserRegistrationThunk();
 export const verify = fetchUserRegistrationVerificationThunk();
 export const setUserThreadCount = fetchUserThreadCountThunk();
@@ -74,6 +76,11 @@ export const userSlice = createSlice({
     friends: [],
 
     invalidComments: [],
+
+    deletedComment: 0,
+    validatedComment: 0,
+
+    updateAction: false,
   },
 
   reducers: {
@@ -92,6 +99,23 @@ export const userSlice = createSlice({
       state.commentCount = 0;
       state.voteCount = 0;
     },
+    setInvalidComments: (state, action) => {
+      state.invalidComments = action.payload;
+    },
+    updateInvalidComments: (state, action) => {
+      state.invalidComments = state.invalidComments.map(function (comment) {
+        return comment.id == action.payload ? null : comment;
+      }).filter(value => value != null);
+    },
+    setDeletedComment: (state, action) => {
+      state.deletedComment = action.payload;
+    },
+    setValidatedComment: (state, action) => {
+      state.validatedComment = action.payload;
+    },
+    setUpdateAction: (state, action) => {
+      state.updateAction = action.payload;
+    }
   },
   
   extraReducers: {
@@ -157,6 +181,7 @@ export const userSlice = createSlice({
     [setUserThreads.rejected]: (state, action) => {},
     [setUserThreads.pending]: (state, action) => {},
     [setUserThreads.fulfilled]: (state, action) => {
+      console.log('action', action);
       state.threads = action.payload;
     },
 
@@ -285,6 +310,7 @@ export const userSlice = createSlice({
     [deleteComments.fulfilled]: (state, action) => {
       state.status = action.payload.status;
       if (action.payload.status === "comments deleted") {
+
         const bookmarkId = action.payload.bookmark.id;
         state.threads = state.threads.map(function (thread) {
           const bookmarks = thread.bookmarks.map(function (bookmark) {
@@ -295,7 +321,11 @@ export const userSlice = createSlice({
           thread.bookmarks = bookmarks;
           return thread;
         });
+        
+        state.deletedComment = action.payload.comment_id;
+        state.updateAction = true;
       }
+
     },
 
     [validateComments.rejected]: (state, action) => {},
@@ -313,6 +343,9 @@ export const userSlice = createSlice({
           thread.bookmarks = bookmarks;
           return thread;
         });
+
+        state.validatedComment = action.payload.comment_id;
+        state.updateAction = true;
       }
     },
 
@@ -320,6 +353,17 @@ export const userSlice = createSlice({
     [setUserInvalidComment.pending]: (state, action) => {},
     [setUserInvalidComment.fulfilled]: (state, action) => {
       state.invalidComments = action.payload;
+    },
+
+    [autoLogin.rejected]: (state, action) => {},
+    [autoLogin.pending]: (state, action) => {},
+    [autoLogin.fulfilled]: (state, action) => {
+      state.alphanumeric_id = action.payload.alphanumeric_id;
+      state.status = action.payload.status;
+      state.email = action.payload.email;
+      state.pseudonym = action.payload.pseudonym;
+      state.image_url = action.payload.image_url;
+      state.email_verified_at = action.payload.email_verified_at;
     },
 
   },
@@ -330,6 +374,11 @@ export const {
   setTestouille,
   setStatus,
   clearUser,
+  setInvalidComments,
+  setDeletedComment,
+  setValidatedComment,
+  updateInvalidComments,
+  setUpdateAction,
 } = userSlice.actions;
 
 
