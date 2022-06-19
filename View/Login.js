@@ -26,14 +26,14 @@ const Login = () => {
     //   email: "linnie.altenwerth@example.net",
     //   password: "password",
     // }));
-    dispatch(login({
-      email: "global@stackmemento.com",
-      password: "password",
-    }));
     // dispatch(login({
-    //   email: email,
-    //   password: password,
+    //   email: "global@stackmemento.com",
+    //   password: "password",
     // }));
+    dispatch(login({
+      email: email,
+      password: password,
+    }));
   }
 
   useEffect(() => {
